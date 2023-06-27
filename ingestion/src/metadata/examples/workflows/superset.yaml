@@ -1,13 +1,16 @@
 source:
   type: superset
-  serviceName: local_superset_12
+  serviceName: local_postgres_sample
   serviceConnection:
     config:
+      # hostPort: http://ec2-3-142-98-17.us-east-2.compute.amazonaws.com:8080
       hostPort: http://localhost:8088
       connection:
         type: Postgres
         username: superset
-        password: superset
+        authType:
+        # username: openmetadata_user
+          password: superset
         hostPort: localhost:5432
         database: superset
         # username: admin
@@ -17,12 +20,21 @@ source:
   sourceConfig:
     config:
       type: DashboardMetadata
-      chartFilterPattern: {}
-      dashboardFilterPattern: {}
+      dbServiceNames: 
+      - local_service
+      - local_postgres
+     
+      # chartFilterPattern: {}
+      # dashboardFilterPattern:
+      #   includes:
+      #   - ".*my.*dash.*"
 sink:
   type: metadata-rest
   config: {}
 workflowConfig:
+  loggerLevel: DEBUG
   openMetadataServerConfig:
     hostPort: http://localhost:8585/api
-    authProvider: no-auth
+    authProvider: openmetadata
+    securityConfig:
+      "jwtToken": "eyJraWQiOiJHYjM4OWEtOWY3Ni1nZGpzLWE5MmotMDI0MmJrOTQzNTYiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzQm90IjpmYWxzZSwiaXNzIjoib3Blbi1tZXRhZGF0YS5vcmciLCJpYXQiOjE2NjM5Mzg0NjIsImVtYWlsIjoiYWRtaW5Ab3Blbm1ldGFkYXRhLm9yZyJ9.tS8um_5DKu7HgzGBzS1VTA5uUjKWOCU0B_j08WXBiEC0mr0zNREkqVfwFDD-d24HlNEbrqioLsBuFRiwIWKc1m_ZlVQbG7P36RUxhuv2vbSp80FKyNM-Tj93FDzq91jsyNmsQhyNv_fNr3TXfzzSPjHt8Go0FMMP66weoKMgW2PbXlhVKwEuXUHyakLLzewm9UMeQaEiRzhiTMU3UkLXcKbYEJJvfNFcLwSl9W8JCO_l0Yj3ud-qt_nQYEZwqW6u5nfdQllN133iikV4fM5QZsMCnm8Rq1mvLR0y9bmJiD7fwM1tmJ791TUWqmKaTnP49U493VanKpUAfzIiOiIbhg"
